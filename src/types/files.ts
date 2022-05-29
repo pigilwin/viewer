@@ -1,13 +1,12 @@
 export interface Size {
     width: number;
     height: number;
-    length: () => number;
 }
 
 export interface LoadedFile {
     key: string;
-    content: Blob;
-    thumbnail: Blob;
+    content: string;
+    thumbnail: string;
     fileType: string;
     isVideo: boolean;
     size: Size;

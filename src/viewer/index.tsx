@@ -1,5 +1,9 @@
+import { NavigationBar } from "./NavigationBar";
+
  export const Viewer = (): JSX.Element => {
     return (
-        <div></div>
+        <div>
+            <NavigationBar />
+        </div>
     );
 };

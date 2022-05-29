@@ -11,25 +11,30 @@ export const getFilesFromDirectory = async (directoryHandler: FileSystemDirector
             }
 
             const isVideo = file.type.includes('video');
-            const blob = new Blob([await file.arrayBuffer()], {type: file.type});
-            const thumbnailBlob = await createThumbnail(blob, isVideo);
+            const content = await blobToString(file);
+            const thumbnailBlob = await createThumbnail(file, isVideo);
 
 
             files.push({
                 key: key,
                 isVideo: isVideo,
-                content: blob,
-                thumbnail: thumbnailBlob,
+                content: content,
+                thumbnail: await blobToString(thumbnailBlob),
                 fileType: file.type,
                 size: await generateSize(thumbnailBlob),
             });
         }
+
+        const length = (image: Size) => Math.sqrt(
+            Math.pow(image.width, 2) +
+            Math.pow(image.height, 2)
+        );
         
         /**
          * Sort the files randomly
          */
         files.sort((first, second) => {
-            return first.size.length() - second.size.length();
+            return length(first.size) - length(second.size);
         });
 
         resolve(files);
@@ -118,16 +123,20 @@ const generateSize = (blob: Blob): Promise<Size> => {
             URL.revokeObjectURL(url);
             resolve({
                 height: image.height,
-                width: image.width,
-                length: (): number => {
-                    return Math.sqrt(
-                        Math.pow(image.width, 2) +
-                        Math.pow(image.height, 2)
-                    );
-                }
+                width: image.width
             });
         });
         image.src = url;
         documentFragment.appendChild(image);
     });
 }
+
+export const blobToString = (blob: Blob): Promise<string> => {
+    return new Promise<string>((resolve) => {
+        const reader = new FileReader();
+        reader.addEventListener('load', () => {
+            resolve(reader.result as string);
+        });
+        reader.readAsDataURL(blob);
+    });
+};
