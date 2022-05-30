@@ -1,5 +1,6 @@
 import { useSelector } from "react-redux";
 import { filesSelector, viewingSelector } from "store/files/fileSlice";
+import { ContentViewer } from "./content";
 import { Grid } from "./grid";
 import { NavigationBar } from "./NavigationBar";
 
@@ -10,16 +11,16 @@ import { NavigationBar } from "./NavigationBar";
 
     if (loadedFile !== undefined) {
         return (
-            <div>
-                <NavigationBar />
-                
+            <div className="min-h-screen">
+                <NavigationBar hasLoadedFile={true}/>
+                <ContentViewer file={loadedFile}/>
             </div>
         );
     }
 
     return (
         <div>
-            <NavigationBar />
+            <NavigationBar hasLoadedFile={false}/>
             <Grid files={files}/>
         </div>
     );

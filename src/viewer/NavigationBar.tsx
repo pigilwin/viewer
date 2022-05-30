@@ -1,8 +1,11 @@
 import { useSelector, useDispatch } from "react-redux";
-import { filesLengthSelector, storeFiles } from "store/files/fileSlice";
+import { filesLengthSelector, storeFiles, loadFile } from "store/files/fileSlice";
 import { getFilesFromDirectory } from 'lib/files';
 
-export const NavigationBar = (): JSX.Element => {
+interface NavigationBarProperties {
+    hasLoadedFile: boolean;
+}
+export const NavigationBar = ({hasLoadedFile}: NavigationBarProperties): JSX.Element => {
 
     const files = useSelector(filesLengthSelector);
     const dispatch = useDispatch();
@@ -22,14 +25,23 @@ export const NavigationBar = (): JSX.Element => {
         loadedWithFiles.push(
             <p key="0">The amount of files found are {files}</p>
         );
-        loadedWithFiles.push(<PlayButton key="1" onClick={playlistClickHandler}/>);
+        loadedWithFiles.push(<PlayButton key={1} onClick={playlistClickHandler}/>);
+    }
+
+    if (hasLoadedFile) {
+        const closeFileClickHandler = () => {
+            dispatch(loadFile(''));
+        };
+        loadedWithFiles.push(
+            <button key={2} className="bg-red-400 p-2 text-center cursor-pointer rounded-md" onClick={closeFileClickHandler}>Close File</button>
+        );
     }
 
     return (
         <nav className="flex flex-col sm:flex-row w-full justify-between items-center px-4 sm:px-6 py-1 bg-white shadow sm:shadow-none">
             <h1 className="text-2xl">Viewer</h1>
             {loadedWithFiles}
-            <button className="bg-cyan-400 p-2 text-center cursor-pointer" onClick={openFilesClickHandler}>Open Files</button>
+            <button className="bg-cyan-400 p-2 text-center cursor-pointer rounded-md" onClick={openFilesClickHandler}>Open Files</button>
         </nav>
     );
 };
