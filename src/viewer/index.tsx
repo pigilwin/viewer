@@ -13,7 +13,7 @@ import { PlaylistViewer } from "./PlaylistViewer";
 
     if (loadedFile !== undefined) {
         return (
-            <div className="min-h-screen">
+            <div className="container min-h-screen">
                 <NavigationBar hasLoadedFile={true}/>
                 <ContentViewer file={loadedFile}/>
             </div>
@@ -22,7 +22,7 @@ import { PlaylistViewer } from "./PlaylistViewer";
 
     if (playlistIndex !== null) {
         return (
-            <div className="min-h-screen">
+            <div className="container min-h-screen">
                 <NavigationBar hasLoadedFile={false}/>
                 <PlaylistViewer index={playlistIndex}/>
             </div>
@@ -30,7 +30,7 @@ import { PlaylistViewer } from "./PlaylistViewer";
     }
 
     return (
-        <div>
+        <div className="container min-h-screen">
             <NavigationBar hasLoadedFile={false}/>
             <Grid files={files}/>
         </div>
