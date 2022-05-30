@@ -1,3 +1,5 @@
+import { useDispatch } from "react-redux";
+import { loadFile } from "store/files/fileSlice";
 import { LoadedFiles } from "types/files";
 import { ThumbnailImage } from "./content";
 
@@ -5,10 +7,14 @@ interface GridProperties {
     files: LoadedFiles;
 }
 export const Grid = ({files}: GridProperties): JSX.Element => {
+    const dispatch = useDispatch();
     const elements: JSX.Element[] = [];
     for (const file of files) {
+        const onClickHandler = (): void => {
+            dispatch(loadFile(file.key));
+        }
         elements.push(
-            <ThumbnailImage key={file.key} file={file}/>
+            <ThumbnailImage onClick={onClickHandler} key={file.key} file={file}/>
         );
     }
     return (
