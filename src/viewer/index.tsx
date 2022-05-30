@@ -11,28 +11,24 @@ import { PlaylistViewer } from "./PlaylistViewer";
     const loadedFile = useSelector(viewingSelector);
     const playlistIndex = useSelector(playlistIndexSelector);
 
-    if (loadedFile !== undefined) {
-        return (
-            <div className="container min-h-screen">
-                <NavigationBar hasLoadedFile={true}/>
-                <ContentViewer file={loadedFile}/>
-            </div>
-        );
-    }
+    let content: JSX.Element | null = null;
+    let hasLoadedFile: boolean = false;
 
-    if (playlistIndex !== null) {
-        return (
-            <div className="container min-h-screen">
-                <NavigationBar hasLoadedFile={false}/>
-                <PlaylistViewer index={playlistIndex}/>
-            </div>
-        );
+    if (loadedFile !== undefined) {
+        content = <ContentViewer file={loadedFile} />;
+        hasLoadedFile = true;
+    } else if (playlistIndex !== null) {
+        content = <PlaylistViewer index={playlistIndex}/>;
+    } else {
+        content = <Grid files={files}/>;
     }
 
     return (
-        <div className="container min-h-screen">
-            <NavigationBar hasLoadedFile={false}/>
-            <Grid files={files}/>
+        <div className="wrapper">
+            <NavigationBar hasLoadedFile={hasLoadedFile}/>
+            <div className="max-h-screen">
+                {content}
+            </div>
         </div>
     );
 };
