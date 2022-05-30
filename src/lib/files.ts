@@ -25,16 +25,8 @@ export const getFilesFromDirectory = async (directoryHandler: FileSystemDirector
             });
         }
 
-        const length = (image: Size) => Math.sqrt(
-            Math.pow(image.width, 2) +
-            Math.pow(image.height, 2)
-        );
-        
-        /**
-         * Sort the files randomly
-         */
-        files.sort((first, second) => {
-            return length(first.size) - length(second.size);
+        files.sort(() => {
+            return Math.random() - 0.5;
         });
 
         resolve(files);
