@@ -23,4 +23,5 @@ export const {
     storeFiles
 } = filesSlice.actions;
 
-export const filesLength = (state: RootState): number => state.filesReducer.files.length;
+export const filesLengthSelector = (state: RootState): number => state.filesReducer.files.length;
+export const filesSelector = (state: RootState): LoadedFiles => state.filesReducer.files;

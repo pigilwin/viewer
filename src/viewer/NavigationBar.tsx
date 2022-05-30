@@ -1,10 +1,10 @@
 import { useSelector, useDispatch } from "react-redux";
-import { filesLength, storeFiles } from "store/files/fileSlice";
+import { filesLengthSelector, storeFiles } from "store/files/fileSlice";
 import { getFilesFromDirectory } from 'lib/files';
 
 export const NavigationBar = (): JSX.Element => {
 
-    const files = useSelector(filesLength);
+    const files = useSelector(filesLengthSelector);
     const dispatch = useDispatch();
     const loadedWithFiles: JSX.Element[] = [];
 
