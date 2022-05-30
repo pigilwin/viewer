@@ -16,4 +16,5 @@ export type LoadedFiles = Array<LoadedFile>;
 export interface FileState {
     files: LoadedFiles;
     viewing: string;
+    playlistIndex: number | null;
 }

@@ -69,14 +69,14 @@ export const ContentViewer = ({file}: ContentViewerProperties): JSX.Element => {
 
     if (file.isVideo) {
         return (
-            <div className="flex flex-col items-center min-h-screen justify-center">
+            <div className="flex flex-col items-center min-h-screen max-h-screen justify-center">
                 <video autoPlay className="object-scale-down object-center block" src={stateUrl}></video>    
             </div>
         );
     }
 
     return (
-        <div className="flex flex-col items-center min-h-screen justify-center">
+        <div className="flex flex-col items-center min-h-screen max-h-screen justify-center">
             <img className="object-scale-down object-center block" alt={file.key} src={stateUrl} />
         </div>
     );

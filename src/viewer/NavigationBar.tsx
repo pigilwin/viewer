@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
-import { filesLengthSelector, storeFiles, loadFile } from "store/files/fileSlice";
+import { filesLengthSelector, playlistIndexSelector, storeFiles, loadFile, loadPlaylist } from "store/files/fileSlice";
 import { getFilesFromDirectory } from 'lib/files';
 
 interface NavigationBarProperties {
@@ -8,6 +8,8 @@ interface NavigationBarProperties {
 export const NavigationBar = ({hasLoadedFile}: NavigationBarProperties): JSX.Element => {
 
     const files = useSelector(filesLengthSelector);
+    const playlistIsLoaded = useSelector(playlistIndexSelector);
+
     const dispatch = useDispatch();
     const loadedWithFiles: JSX.Element[] = [];
 
@@ -18,7 +20,11 @@ export const NavigationBar = ({hasLoadedFile}: NavigationBarProperties): JSX.Ele
     };
 
     const playlistClickHandler = () => {
-
+        if (playlistIsLoaded !== null) {
+            dispatch(loadPlaylist(null));
+            return;
+        }
+        dispatch(loadPlaylist(0));
     };
 
     if (files > 0) {
@@ -38,7 +44,7 @@ export const NavigationBar = ({hasLoadedFile}: NavigationBarProperties): JSX.Ele
     }
 
     return (
-        <nav className="flex flex-col sm:flex-row w-full justify-between items-center px-4 sm:px-6 py-1 bg-white shadow sm:shadow-none">
+        <nav className="flex flex-row w-full justify-between items-center px-4 py-1 bg-white shadow">
             <h1 className="text-2xl">Viewer</h1>
             {loadedWithFiles}
             <button className="bg-cyan-400 p-2 text-center cursor-pointer rounded-md" onClick={openFilesClickHandler}>Open Files</button>
