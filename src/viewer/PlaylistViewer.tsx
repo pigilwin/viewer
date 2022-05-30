@@ -60,15 +60,11 @@ export const PlaylistViewer = ({index}: PlaylistViewerProperties): JSX.Element =
 
     if (file.isVideo) {
         return (
-            <div className="flex flex-col items-center min-h-screen max-h-screen justify-center">
-                <video autoPlay className="object-scale-down object-center block" src={stateUrl} onEnded={nextFileHandler}></video>    
-            </div>
+            <video autoPlay className="mx-auto h-screen object-scale-down" src={stateUrl} onEnded={nextFileHandler}></video>    
         );
     }
 
     return (
-        <div className="flex flex-col items-center min-h-screen max-h-screen justify-center">
-            <img className="object-scale-down object-center block" alt={file.key} src={stateUrl} onLoad={nextFileHandler} />
-        </div>
+        <img className="mx-auto h-screen object-scale-down" alt={file.key} src={stateUrl} onLoad={nextFileHandler} />
     );
 };
