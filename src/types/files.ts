@@ -3,7 +3,7 @@ export interface Size {
     height: number;
 }
 
-export interface LoadedFile {
+export interface RenderableFile {
     key: string;
     content: string;
     thumbnail: string;
@@ -11,10 +11,24 @@ export interface LoadedFile {
     isVideo: boolean;
     size: Size;
 }
-export type LoadedFiles = Array<LoadedFile>;
+
+export interface Directories {
+    [key: string]: LoadedFiles[];
+}
+
+export interface LoadedFiles {
+    files: RenderableFile[];
+    directories: Directories;
+}
+
+export type PotentiallyLoadedFiles = LoadedFiles | null;
+
+export interface RenderableFiles {
+    [key: string]: RenderableFile;
+}
 
 export interface FileState {
-    files: LoadedFiles;
+    files: PotentiallyLoadedFiles;
     viewing: string;
     playlistIndex: number | null;
 }
