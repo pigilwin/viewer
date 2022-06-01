@@ -2,12 +2,15 @@ import { LoadedFiles, Size } from 'types/files';
 
 export const getFilesFromDirectory = async (directoryHandler: FileSystemDirectoryHandle): Promise<LoadedFiles> => {
     return new Promise<LoadedFiles>(async (resolve) => {
-        const files: LoadedFiles = [];
-
-        const loadFilesFromDirectory = async (directoryName: string, directoryHandler: FileSystemDirectoryHandle) => {
+        const loadFilesFromDirectory = async (directoryHandler: FileSystemDirectoryHandle): Promise<LoadedFiles> => {
+            const specification: LoadedFiles = {
+                files: [],
+                directories: {}
+            };
             for await (const [key, value] of directoryHandler.entries()) {
                 if (value.kind === 'directory') {
-                    await loadFilesFromDirectory(directoryHandler.name, value as FileSystemDirectoryHandle);
+                    console.log(value.name);
+                    await loadFilesFromDirectory(value as FileSystemDirectoryHandle);
                     continue;
                 }
 
@@ -20,10 +23,9 @@ export const getFilesFromDirectory = async (directoryHandler: FileSystemDirector
                 const isVideo = file.type.includes('video');
                 const content = await blobToString(file);
                 const thumbnailBlob = await createThumbnail(file, isVideo);
-    
-    
-                files.push({
-                    key: deriveKey(key, directoryName, directoryHandler.name),
+
+                specification.files.push({
+                    key: deriveKey(key, directoryHandler.name),
                     isVideo: isVideo,
                     content: content,
                     thumbnail: await blobToString(thumbnailBlob),
@@ -31,16 +33,15 @@ export const getFilesFromDirectory = async (directoryHandler: FileSystemDirector
                     size: await generateSize(thumbnailBlob),
                 });
             }
+
+            specification.files.sort(() => {
+                return Math.random() - 0.5;
+            });
+
+            return specification;
         };
 
-        await loadFilesFromDirectory('', directoryHandler);
-
-        files.sort(() => {
-            return Math.random() - 0.5;
-        });
-
-        console.log(files);
-
+        const files: LoadedFiles = await loadFilesFromDirectory(directoryHandler);
         resolve(files);
     });
 }
@@ -145,6 +146,6 @@ const blobToString = (blob: Blob): Promise<string> => {
     });
 };
 
-const deriveKey = (key: string, parentDirectory: string, directory: string): string => {
-    return [parentDirectory, directory, key].join('-');
+const deriveKey = (key: string, directory: string): string => {
+    return [directory, key].join('-');
 }
