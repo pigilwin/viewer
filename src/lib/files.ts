@@ -9,8 +9,7 @@ export const getFilesFromDirectory = async (directoryHandler: FileSystemDirector
             };
             for await (const [key, value] of directoryHandler.entries()) {
                 if (value.kind === 'directory') {
-                    console.log(value.name);
-                    await loadFilesFromDirectory(value as FileSystemDirectoryHandle);
+                    specification.directories[value.name] = await loadFilesFromDirectory(value);
                     continue;
                 }
 

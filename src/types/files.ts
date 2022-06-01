@@ -13,7 +13,7 @@ export interface RenderableFile {
 }
 
 export interface Directories {
-    [key: string]: LoadedFiles[];
+    [key: string]: LoadedFiles;
 }
 
 export interface LoadedFiles {
@@ -30,5 +30,4 @@ export interface RenderableFiles {
 export interface FileState {
     files: PotentiallyLoadedFiles;
     viewing: string;
-    playlistIndex: number | null;
 }
