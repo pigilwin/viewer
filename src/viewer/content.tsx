@@ -69,7 +69,7 @@ export const ContentViewer = ({file}: ContentViewerProperties): JSX.Element => {
 
     if (file.isVideo) {
         return (
-            <video autoPlay className="mx-auto h-screen object-scale-down" src={stateUrl}></video>
+            <video autoPlay controls className="mx-auto h-screen object-scale-down" src={stateUrl}></video>
         );
     }
 
