@@ -5,7 +5,7 @@ import {
     RenderableFile, 
     LoadedFiles, 
     PotentiallyLoadedFiles, 
-    RenderableFiles 
+    RenderableMap 
 } from "types/files";
 
 export const initialState: FileState =  {
@@ -69,8 +69,8 @@ export const viewingSelector = (state: RootState): RenderableFile | undefined =>
     if (state.filesReducer.files === null) {
         return undefined;
     }
-    const findFile = (loadedFiles: LoadedFiles): RenderableFiles => {
-        let files: RenderableFiles = {};
+    const findFile = (loadedFiles: LoadedFiles): RenderableMap => {
+        let files: RenderableMap = {};
         for (const renderableFile of loadedFiles.files) {
             files[renderableFile.key] = renderableFile;
         }

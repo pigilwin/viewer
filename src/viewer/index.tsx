@@ -2,7 +2,7 @@ import { useSelector } from "react-redux";
 import { filesSelector, viewingSelector } from "store/files/fileSlice";
 import { LoadedFiles } from "types/files";
 import { ContentViewer } from "./content";
-import { Grid } from "./grid";
+import { RecursiveBuilder } from "./grid";
 import { NavigationBar } from "./NavigationBar";
 
  export const Viewer = (): JSX.Element => {
@@ -16,8 +16,8 @@ import { NavigationBar } from "./NavigationBar";
     if (loadedFile !== undefined) {
         content = <ContentViewer file={loadedFile} />;
         hasLoadedFile = true;
-    } else if (files !== undefined) {
-        content = <Grid files={files as LoadedFiles}/>;
+    } else if (files !== null) {
+        content = <RecursiveBuilder title={''} tree={files as LoadedFiles}/>;
     }
 
     return (

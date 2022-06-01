@@ -12,18 +12,20 @@ export interface RenderableFile {
     size: Size;
 }
 
+export type RenderableFiles = RenderableFile[];
+
 export interface Directories {
     [key: string]: LoadedFiles;
 }
 
 export interface LoadedFiles {
-    files: RenderableFile[];
+    files: RenderableFiles;
     directories: Directories;
 }
 
 export type PotentiallyLoadedFiles = LoadedFiles | null;
 
-export interface RenderableFiles {
+export interface RenderableMap {
     [key: string]: RenderableFile;
 }
 
