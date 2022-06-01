@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { MouseEvent ,useEffect, useState } from "react";
 import { LoadedFile } from "types/files";
 
 interface ThumbnailImageProperties {
@@ -73,8 +73,17 @@ export const ContentViewer = ({file}: ContentViewerProperties): JSX.Element => {
         );
     }
 
+
+    const fullScreenEventHandler = async (event: MouseEvent<HTMLImageElement>) => {
+        if (document.fullscreenElement !== null) {
+            document.exitFullscreen();
+            return;
+        }
+        await event.currentTarget.requestFullscreen();
+    }
+
     return (
-        <img className="mx-auto h-screen object-scale-down" alt={file.key} src={stateUrl} />
+        <img onClick={fullScreenEventHandler} className="mx-auto h-screen object-scale-down" alt={file.key} src={stateUrl} />
     );
     
 };
