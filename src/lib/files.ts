@@ -3,31 +3,43 @@ import { LoadedFiles, Size } from 'types/files';
 export const getFilesFromDirectory = async (directoryHandler: FileSystemDirectoryHandle): Promise<LoadedFiles> => {
     return new Promise<LoadedFiles>(async (resolve) => {
         const files: LoadedFiles = [];
-        for await (const [key, value] of directoryHandler.entries()) {
-            const file = await value.getFile(key) as File;
 
-            if (file.type.length === 0) {
-                continue;
+        const loadFilesFromDirectory = async (directoryName: string, directoryHandler: FileSystemDirectoryHandle) => {
+            for await (const [key, value] of directoryHandler.entries()) {
+                if (value.kind === 'directory') {
+                    await loadFilesFromDirectory(directoryHandler.name, value as FileSystemDirectoryHandle);
+                    continue;
+                }
+
+                const file = await value.getFile();
+    
+                if (file.type.length === 0) {
+                    continue;
+                }
+    
+                const isVideo = file.type.includes('video');
+                const content = await blobToString(file);
+                const thumbnailBlob = await createThumbnail(file, isVideo);
+    
+    
+                files.push({
+                    key: deriveKey(key, directoryName, directoryHandler.name),
+                    isVideo: isVideo,
+                    content: content,
+                    thumbnail: await blobToString(thumbnailBlob),
+                    fileType: file.type,
+                    size: await generateSize(thumbnailBlob),
+                });
             }
+        };
 
-            const isVideo = file.type.includes('video');
-            const content = await blobToString(file);
-            const thumbnailBlob = await createThumbnail(file, isVideo);
-
-
-            files.push({
-                key: key,
-                isVideo: isVideo,
-                content: content,
-                thumbnail: await blobToString(thumbnailBlob),
-                fileType: file.type,
-                size: await generateSize(thumbnailBlob),
-            });
-        }
+        await loadFilesFromDirectory('', directoryHandler);
 
         files.sort(() => {
             return Math.random() - 0.5;
         });
+
+        console.log(files);
 
         resolve(files);
     });
@@ -123,7 +135,7 @@ const generateSize = (blob: Blob): Promise<Size> => {
     });
 }
 
-export const blobToString = (blob: Blob): Promise<string> => {
+const blobToString = (blob: Blob): Promise<string> => {
     return new Promise<string>((resolve) => {
         const reader = new FileReader();
         reader.addEventListener('load', () => {
@@ -132,3 +144,7 @@ export const blobToString = (blob: Blob): Promise<string> => {
         reader.readAsDataURL(blob);
     });
 };
+
+const deriveKey = (key: string, parentDirectory: string, directory: string): string => {
+    return [parentDirectory, directory, key].join('-');
+}
