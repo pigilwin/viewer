@@ -1,15 +1,14 @@
 import { useSelector } from "react-redux";
-import { filesSelector, viewingSelector, playlistIndexSelector } from "store/files/fileSlice";
+import { filesSelector, viewingSelector } from "store/files/fileSlice";
+import { LoadedFiles } from "types/files";
 import { ContentViewer } from "./content";
 import { Grid } from "./grid";
 import { NavigationBar } from "./NavigationBar";
-import { PlaylistViewer } from "./PlaylistViewer";
 
  export const Viewer = (): JSX.Element => {
 
     const files = useSelector(filesSelector);
     const loadedFile = useSelector(viewingSelector);
-    const playlistIndex = useSelector(playlistIndexSelector);
 
     let content: JSX.Element | null = null;
     let hasLoadedFile: boolean = false;
@@ -17,10 +16,8 @@ import { PlaylistViewer } from "./PlaylistViewer";
     if (loadedFile !== undefined) {
         content = <ContentViewer file={loadedFile} />;
         hasLoadedFile = true;
-    } else if (playlistIndex !== null) {
-        content = <PlaylistViewer index={playlistIndex}/>;
-    } else {
-        content = <Grid files={files}/>;
+    } else if (files !== undefined) {
+        content = <Grid files={files as LoadedFiles}/>;
     }
 
     return (

@@ -1,8 +1,8 @@
 import { MouseEvent ,useEffect, useState } from "react";
-import { LoadedFile } from "types/files";
+import { RenderableFile } from "types/files";
 
 interface ThumbnailImageProperties {
-    file: LoadedFile;
+    file: RenderableFile;
     onClick: () => void;
 }
 export const ThumbnailImage = ({file, onClick}: ThumbnailImageProperties): JSX.Element | null => {
@@ -38,7 +38,7 @@ export const ThumbnailImage = ({file, onClick}: ThumbnailImageProperties): JSX.E
 }
 
 interface ContentViewerProperties {
-    file: LoadedFile;
+    file: RenderableFile;
 }
 export const ContentViewer = ({file}: ContentViewerProperties): JSX.Element => {
 
